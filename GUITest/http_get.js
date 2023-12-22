@@ -13,7 +13,7 @@ function httpGetAsync(url, is_text) {
 
 (async ()=>
 {
-    text = await httpGetAsync("http://www.baidu.com", true);
+    text = await httpGetAsync("https://www.gutenberg.org/cache/epub/1065/pg1065.txt", true);
     print(text);        
     
 })()
