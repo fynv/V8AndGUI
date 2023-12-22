@@ -10,7 +10,7 @@ The main points to be shown:
 
 I find [Dear ImGui](https://github.com/ocornut/imgui) to be helpful for providing a minimal background for showing the patterns. 
 
-The "Launcher" window is coded directly into the main program, which is used for loading code and showing debug log. The scripts and use the following APIs exported by the main program:
+The "Launcher" window is coded directly into the main program, which is used for loading code and showing debug log. The scripts can use the following APIs exported by the main program:
 
 * Global function "print()" for printing log.
 * Global object "http" for making synced/asynced http requests.
