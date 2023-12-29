@@ -135,12 +135,21 @@ void WrapperButton::define(ClassDefinition& cls)
 	WrapperElement::define(cls);
 	cls.name = "Button";
 	cls.ctor = ctor;
+	cls.dtor = dtor;
 
 	std::vector<AccessorDefinition> props = {
 		{ "onClick", GetOnClick, SetOnClick },
 	};
 	cls.properties.insert(cls.properties.end(), props.begin(), props.end());
 }
+
+typedef v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function>> CallbackT;
+
+struct ButtonClickData
+{
+	GameContext* ctx;
+	CallbackT callback;
+};
 
 
 void* WrapperButton::ctor(const v8::FunctionCallbackInfo<v8::Value>& info)
@@ -156,14 +165,16 @@ void* WrapperButton::ctor(const v8::FunctionCallbackInfo<v8::Value>& info)
 	return new Button(name.c_str());
 }
 
-
-typedef v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function>> CallbackT;
-
-struct ButtonClickData
+void WrapperButton::dtor(void* ptr, GameContext* ctx)
 {
-	GameContext* ctx;
-	CallbackT callback;
-};
+	Button* self = (Button*)ptr;
+	if (self->click_callback_data != nullptr)
+	{
+		ButtonClickData* data = (ButtonClickData*)self->click_callback_data;
+		delete data;
+	}
+	WrapperElement::dtor(ptr, ctx);
+}
 
 static void ButtonClickCallback(void* ptr)
 {
